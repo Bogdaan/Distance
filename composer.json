@@ -1,0 +1,20 @@
+{
+    "name": "Bogdaan/distance",
+    "type": "library",
+    "description": "Geo distance library for PHP.",
+    "keywords": ["distance", "geo"],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Novikov Bogdan",
+            "email": "hcbogdan@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.4.0",
+        "egeloen/http-adapter": "0.7.*",
+    },
+    "autoload": {
+        "psr-0": { "Distance": "src/" }
+    }
+}
