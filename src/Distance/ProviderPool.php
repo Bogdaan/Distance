@@ -11,6 +11,8 @@ use Distance\Exception\ProviderError;
 /**
  * Fail-safe set of providers.
  * Switch providers on service exception.
+ *
+ * @author hcbogdan
  */
 class ProviderPool implements ProviderInterface
 {

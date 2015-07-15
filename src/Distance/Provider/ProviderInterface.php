@@ -1,6 +1,6 @@
 <?php
 
-namespace Distance;
+namespace Distance\Provider;
 
 use Distance\Model\Coordinate;
 
@@ -9,6 +9,12 @@ use Distance\Model\Coordinate;
  */
 interface ProviderInterface
 {
+    /**
+     * Provider codename
+     *
+     * @return string unique identificator
+     */
+    public function getUid();
 
     /**
      * Calculate distance in meters between two coordinates

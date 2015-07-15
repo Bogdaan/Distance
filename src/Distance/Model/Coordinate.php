@@ -4,6 +4,7 @@ namespace Distance\Model;
 
 /**
  * Coordinate entity
+ * @author hcbogdan
  */
 class Cooordinate
 {
@@ -17,14 +18,24 @@ class Cooordinate
      */
     private $longitude;
 
+
     /**
-     * @param double latitude
-     * @param double longitude
+     * create coordinate
+     * @param double $lat
+     * @param double $lng
      */
     public function __construct($lat, $lng)
     {
         $this->latitude  = $lat;
         $this->longitude = $lng;
+    }
+
+    /**
+     * string value
+     */
+    public function __toString()
+    {
+        return $this->getLat().', '.$this->getLng();
     }
 
     /**
