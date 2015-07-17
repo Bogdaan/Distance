@@ -9,7 +9,7 @@ use Distance\Model\Distance;
  *
  * @author hcbogdan
  */
-abstract class Provider implements ProviderInterface
+abstract class Provider
 {
     /**
      * create distance object, set provider uid

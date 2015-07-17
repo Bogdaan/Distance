@@ -12,9 +12,17 @@
     ],
     "require": {
         "php": ">=5.4.0",
-        "egeloen/http-adapter": "0.7.*"
+        "igorw/get-in": "^1.0",
+        "guzzlehttp/guzzle": "~5"
     },
     "autoload": {
-        "psr-0": { "Distance": "src/" }
+        "psr-4": {
+            "Distance\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Distance\\Tests\\": "tests/"
+        }
     }
 }

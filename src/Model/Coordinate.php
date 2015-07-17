@@ -6,7 +6,7 @@ namespace Distance\Model;
  * Coordinate entity
  * @author hcbogdan
  */
-class Cooordinate
+class Coordinate
 {
     /**
      * @var double

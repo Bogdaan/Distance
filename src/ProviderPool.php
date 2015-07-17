@@ -7,7 +7,6 @@ use Distance\Model\Coordinate;
 use Distance\Exception\PoolError;
 use Distance\Exception\ProviderError;
 
-
 /**
  * Fail-safe set of providers.
  * Switch providers on service exception.
@@ -24,14 +23,16 @@ class ProviderPool implements ProviderInterface
     /**
      * @var ProviderInterface active provider
      */
-    private $activeProvider;
+    private $activeProvider = null;
 
     /**
-     * @param array list of providers
+     * @param array $providers list of providers
      */
-    public function __construct($providers)
+    public function __construct($providers = null)
     {
-        $this->registerProviders($providers);
+        if(is_array($providers)) {
+            $this->registerProviders($providers);
+        }
     }
 
     /**
@@ -47,7 +48,7 @@ class ProviderPool implements ProviderInterface
      *
      * @param array set of ProviderInterface objects
      */
-    public function registerProviders($providers)
+    public function registerProviders(array $providers)
     {
         $this->providers = array();
 
@@ -62,13 +63,22 @@ class ProviderPool implements ProviderInterface
     }
 
     /**
+     * {@inheritDoc}
+     */
+    public function getUid()
+    {
+        return 'ProviderPool';
+    }
+
+    /**
      * Fali-safe distance between two coordinates in meters
+     *
      * @return integer distance in menters
      */
     public function getDistance(Coordinate $from, Coordinate $to)
     {
         try {
-            return $this->getProvider()->getDistance($from, $to);
+            return $this->getActiveProvider()->getDistance($from, $to);
 
         } catch (PoolError $exception) {
             throw $exception;
@@ -102,11 +112,19 @@ class ProviderPool implements ProviderInterface
     }
 
     /**
+     * @return array enabled providers
+     */
+    public function getProviders()
+    {
+        return $this->providers;
+    }
+
+    /**
      * Active provider
      *
      * @return ProviderInterface
      */
-    protected function getProvider()
+    protected function getActiveProvider()
     {
         if(empty($this->providers))
             throw new PoolError('All providers disabled');

@@ -15,24 +15,22 @@ class Distance
     const UNIT_KILOMETER = 2;
     const UNIT_MILE = 3;
 
-
     /**
      * @var double $distance representation in meters
      */
     private $distance;
 
     /**
-     * @var string $provider uid of provider
+     * @var mixed $provider uid of provider
      */
     private $provider;
 
     /**
      * Create distance object
-     *
-     * @param string $provider provider uid
      * @param double $distamce distance in meters
+     * @param string $provider provider uid
      */
-    public function __construct($provider, $distance)
+    public function __construct($distance, $provider = null)
     {
         $this->distance = $distance;
         $this->provider = $provider;
