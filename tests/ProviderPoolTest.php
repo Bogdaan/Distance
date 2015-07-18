@@ -7,6 +7,9 @@ use Distance\Model\Coordinate;
 use Distance\Model\Distance;
 use Distance\Exception\ProviderError;
 
+/**
+ * @author hcbogdan
+ */
 class ProviderPoolTest extends \PHPUnit_Framework_TestCase
 {
     /**

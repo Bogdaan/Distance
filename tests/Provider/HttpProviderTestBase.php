@@ -7,6 +7,9 @@ use GuzzleHttp\Subscriber\Mock;
 use GuzzleHttp\Message\Response;
 use GuzzleHttp\Stream\Stream;
 
+/**
+ * @author hcbogdan
+ */
 class HttpProviderTestBase extends ProviderTestBase
 {
     protected function getClientWithBody($body)

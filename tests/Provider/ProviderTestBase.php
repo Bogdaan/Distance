@@ -5,6 +5,9 @@ namespace Distance\Tests\Provider;
 use Distance\Model\Distance;
 use Distance\Model\Coordinate;
 
+/**
+ * @author hcbogdan
+ */
 class ProviderTestBase extends \PHPUnit_Framework_TestCase
 {
     protected function getProvider()

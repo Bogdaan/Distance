@@ -4,6 +4,9 @@ namespace Distance\Tests;
 
 use Distance\Model\Coordinate;
 
+/**
+ * @author hcbogdan
+ */
 class CoordinateTest extends \PHPUnit_Framework_TestCase
 {
     protected $coord;

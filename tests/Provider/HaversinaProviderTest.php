@@ -5,13 +5,16 @@ namespace Distance\Tests\Provider;
 use Distance\Provider\HaversinaProvider;
 use Distance\Model\Coordinate;
 
+/**
+ * @author hcbogdan
+ */
 class HaversinaProviderTest extends ProviderTestBase
 {
     protected function getProvider()
     {
         return new HaversinaProvider();
     }
-    
+
     public function testEqualDistance()
     {
         $coord = new Coordinate(30, 30);

@@ -6,6 +6,9 @@ use Distance\Model\Distance;
 use Distance\Model\Coordinate;
 use Distance\Provider\GoogleProvider;
 
+/**
+ * @author hcbogdan
+ */
 class GoogleProviderTest extends HttpProviderTestBase
 {
 

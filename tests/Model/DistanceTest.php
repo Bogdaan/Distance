@@ -4,6 +4,9 @@ namespace Distance\Tests;
 
 use Distance\Model\Distance;
 
+/**
+ * @author hcbogdan
+ */
 class DistanceTest extends \PHPUnit_Framework_TestCase
 {
     protected $distance;
