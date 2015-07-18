@@ -2,10 +2,11 @@
 
 namespace Distance\Provider;
 
+use GuzzleHttp\ClientInterface;
 use Distance\Model\Coordinate;
 use Distance\Model\Distance;
+use Distance\Model\DistanceMatrix;
 use Distance\Exception\ProviderError;
-use Distance\Exception\QuotaExceeded;
 
 /**
  * OSRM distance matrix provider (with distance_table plugin)
@@ -25,7 +26,7 @@ class OsrmProvider extends HttpProvider implements ProviderInterface
     public function __construct(ClientInterface $client, $additionalParams = array())
     {
         if(!isset($additionalParams['baseUrl'])) {
-            throw new ProviderException('set baseUrl parameter');
+            throw new ProviderError('set baseUrl parameter');
         }
 
         $this->baseUrl = $additionalParams['baseUrl'];
@@ -52,16 +53,8 @@ class OsrmProvider extends HttpProvider implements ProviderInterface
             return $this->createDistance(0);
         }
 
-        // convert to string
-        $queryPath = $this->baseUrl.'table?loc='.$from.'&loc='.$to;
-
-
-        $responce = $this
-            ->getClient()
-            ->get($queryPath)
-            ->getBody();
-
-        $json = json_decode( $responce, true );
+        $json = $this
+            ->getQueryJson( $this->baseUrl.'/table?loc='.$from.'&loc='.$to );
 
         if(!isset($json)
         || !isset($json['distance_table'])) {
@@ -71,12 +64,48 @@ class OsrmProvider extends HttpProvider implements ProviderInterface
 
         try {
             $distance = \igorw\get_in($json, ['distance_table', 0, 0]);
-
         } catch(\InvalidArgumentException $exp){
             throw new ProviderError('Provider responce format changed');
-
         }
 
         return $this->createDistance($distance);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    protected function queryDistanceMatrix($normalized)
+    {
+        $queryPath = $this->baseUrl.'/table?v=1';
+        foreach($normalized as $i)
+        {
+            $queryPath .= '&'.$i->getLat().','.$i->getLng();
+        }
+
+        $json = $this->getQueryJson( $queryPath );
+
+        if(!isset($json)
+        || !isset($json['distance_table'])) {
+            throw new ProviderError('Wrong json responce');
+        }
+
+        $distances = $json['distance_table'];
+
+        return new DistanceMatrix($normalized, $distances);
+    }
+
+    /**
+     * Create service query
+     * @param  array $params query params
+     * @return string        responce body
+     */
+    protected function getQueryJson($queryPath)
+    {
+        $body = $this
+            ->getClient()
+            ->get($queryPath)
+            ->getBody();
+
+        return json_decode($body, true);
     }
 }

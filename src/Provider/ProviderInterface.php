@@ -10,19 +10,28 @@ use Distance\Model\Coordinate;
 interface ProviderInterface
 {
     /**
-     * Provider codename
+     * Provider codename.
      *
      * @return string unique identificator
      */
     public function getUid();
 
     /**
-     * Calculate distance in meters between two coordinates
+     * Calculate distance in meters between two coordinates.
      *
      * @param Coordinate route start point
      * @param Coordinate route end point
      *
-     * @return integer distance in meters
+     * @return Distance distance object
      */
     public function getDistance(Coordinate $from, Coordinate $to);
+
+    /**
+     * Calculate distance matrix.
+     *
+     * @param array list of coordinates
+     *
+     * @return array distance matrix
+     */
+    public function getDistanceMatrix($coordinates);
 }

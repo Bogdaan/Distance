@@ -4,6 +4,7 @@ namespace Distance\Provider;
 
 use Distance\Model\Coordinate;
 use Distance\Model\Distance;
+use Distance\Model\DistanceMatrix;
 
 /**
  * Haversina formula provider
@@ -38,5 +39,23 @@ class HaversinaProvider extends Provider implements ProviderInterface
         $distance = self::EARTH_RADIUS * $c;
 
         return $this->createDistance( $distance * 1000 );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    protected function queryDistanceMatrix($normalized)
+    {
+        $distances = [];
+        foreach($normailized as $iidx => $i)
+        {
+            $distances[$iidx] = [];
+            foreach($normailized as $jidx => $j)
+            {
+                $distances[$iidx][$jidx] = $this->getDistance($i, $j);
+            }
+        }
+
+        return new DistanceMatrix($normalized, $distances);
     }
 }

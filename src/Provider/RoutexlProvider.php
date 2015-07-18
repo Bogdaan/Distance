@@ -13,7 +13,7 @@ use Distance\Exception\ProviderError;
  */
 class RoutexlProvider extends HttpProvider implements ProviderInterface
 {
-    const BASE_URL = 'https://api.routexl.nl/';
+    const BASE_URL = 'https://api.routexl.nl/distances';
 
     /**
      * Service auth
@@ -72,18 +72,7 @@ class RoutexlProvider extends HttpProvider implements ProviderInterface
             ),
         );
 
-        $responce = $this
-            ->getClient()
-            ->post(self::BASE_URL, array(
-                'query' => $params,
-                'auth'  => array(
-                    $this->username,
-                    $this->password,
-                ),
-            ))
-            ->getBody();
-
-        $json = json_decode( $responce, true );
+        $json = json_decode( $this->getQueryBody($params), true );
 
         if(!isset($json)) {
             throw new ProviderError('Wrong json responce');
@@ -101,5 +90,53 @@ class RoutexlProvider extends HttpProvider implements ProviderInterface
         }
 
         return $this->createDistance($distance);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    protected function queryDistanceMatrix($normalized)
+    {
+        $params = [];
+        foreach($normalized as $i)
+        {
+            $params['locations'][] = $i->toArray();
+        }
+
+        $countNormalized = count($normalized);
+
+        $json = json_decode( $this->getQueryBody($params), true );
+
+        if(!isset($json)
+        || $json['count'] != $countNormalized) {
+            throw new ProviderError('Wrong json responce');
+        }
+
+        $distances = [];
+        foreach($json['distances'] as $dist)
+        {
+            $distances[ $dist['from'] ][ $dist['to'] ] = $dist['distance'];
+        }
+
+        return new DistanceMatrix($normalized, $distances);
+    }
+
+    /**
+     * Create service query
+     * @param  array $params query params
+     * @return string        responce body
+     */
+    protected function getQueryBody($params)
+    {
+        return $this
+            ->getClient()
+            ->post(self::BASE_URL, array(
+                'query' => $params,
+                'auth'  => array(
+                    $this->username,
+                    $this->password,
+                ),
+            ))
+            ->getBody();
     }
 }

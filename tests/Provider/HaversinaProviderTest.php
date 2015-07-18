@@ -23,4 +23,8 @@ class HaversinaProviderTest extends ProviderTestBase
 
         $this->assertEquals(0, $dist->getDistance());
     }
+
+    public function testDistanceMatrix()
+    {
+    }
 }

@@ -11,7 +11,6 @@ use Distance\Provider\GoogleProvider;
  */
 class GoogleProviderTest extends HttpProviderTestBase
 {
-
     // TODO
     public function testEqualDistance()
     {
@@ -36,6 +35,10 @@ class GoogleProviderTest extends HttpProviderTestBase
         $dist = $provider->getDistance($coord1, $coord2);
 
         $this->assertEquals(1, $dist->getDistance(Distance::UNIT_METER));
+    }
+
+    public function testDistanceMatrix()
+    {
     }
 
     /**

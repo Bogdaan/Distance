@@ -4,6 +4,7 @@ namespace Distance\Provider;
 
 use Distance\Model\Coordinate;
 use Distance\Model\Distance;
+use Distance\Model\DistanceMatrix;
 use Distance\Exception\ProviderError;
 use Distance\Exception\QuotaExceeded;
 
@@ -34,23 +35,15 @@ class GoogleProvider extends HttpProvider implements ProviderInterface
     public function getDistance(Coordinate $from, Coordinate $to)
     {
         if($from==$to){
-            return $this->createDistance(0);    
+            return $this->createDistance(0);
         }
 
-        // convert to string
-        $params = $this->getParams();
+        $params                 = $this->getParams();
         $params['origins']      = $from.'';
         $params['destinations'] = $to.'';
         $params['units']        = 'metric';
 
-        $responce = $this
-            ->getClient()
-            ->get(self::BASE_URL, array(
-                'query' => $params,
-            ))
-            ->getBody();
-
-        $json = json_decode( $responce, true );
+        $json = $this->getQueryJson($params);
 
         if(!isset($json)) {
             throw new ProviderError('Wrong json responce');
@@ -71,5 +64,59 @@ class GoogleProvider extends HttpProvider implements ProviderInterface
         }
 
         return $this->createDistance($distance);
+    }
+
+
+    /**
+     * {@inheritDoc}
+     */
+    protected function queryDistanceMatrix($normalized)
+    {
+        $normilizedStr = implode($normalized, '|');
+
+        $params                 = $this->getParams();
+        $params['origins']      = $normilizedStr;
+        $params['destinations'] = $normilizedStr;
+        $params['units']        = 'metric';
+
+        $json = $this->getQueryJson($params);
+
+        if(!isset($json)) {
+            throw new ProviderError('Wrong json responce');
+        }
+
+        if($json['status'] == 'OVER_QUERY_LIMIT') {
+            throw new QuotaExceeded();
+        } elseif($json['status'] != 'OK') {
+            throw new ProviderError('Provider return status: '.$json->status);
+        }
+
+        $distances = [];
+        foreach($json['rows'] as $rowIdx => $row)
+        {
+            foreach($row['elements'] as $eIdx => $element)
+            {
+                $distances[$rowIdx][$eIdx] = $element['distance']['value'];
+            }
+        }
+
+        return new DistanceMatrix($normalized, $distances);
+    }
+
+    /**
+     * Create service query
+     * @param  array $params query params
+     * @return string        responce body
+     */
+    protected function getQueryJson($params)
+    {
+        $responce = $this
+            ->getClient()
+            ->get(self::BASE_URL, array(
+                'query' => $params,
+            ))
+            ->getBody();
+
+        return json_decode( $responce, true );
     }
 }

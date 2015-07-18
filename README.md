@@ -27,6 +27,11 @@ $pool = new Distance\ProviderPool([
         'baseUrl' => 'http://localhost:2233/',
     ]),
 
+    // graphhopper service
+    new Distance\Provider\GraphhopperProvider($client,[
+        'key' => 'YOU_API_KEY'
+    ]),
+
     // routexl.com distance matrix
     new Distance\Provider\RoutexlProvider($client, [
         'username' => 'YOU_API_USERNAME',
@@ -64,5 +69,5 @@ Currently supported providers:
 
 - [Google Distance Matrinx](https://developers.google.com/maps/documentation/javascript/distancematrix)
 - [OSRM](https://github.com/Project-OSRM/osrm-backend)
-- Graphhopper
-- Routexl
+- [Graphhopper](https://graphhopper.com/)
+- [Routexl](http://www.routexl.nl/blog/api/)

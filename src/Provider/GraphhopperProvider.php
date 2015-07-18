@@ -2,6 +2,7 @@
 
 namespace Distance\Provider;
 
+use GuzzleHttp\ClientInterface;
 use Distance\Model\Coordinate;
 use Distance\Model\Distance;
 use Distance\Exception\ProviderError;
@@ -11,7 +12,19 @@ use Distance\Exception\ProviderError;
  */
 class GraphhopperProvider extends HttpProvider implements ProviderInterface
 {
-    public $baseUrl = 'https://graphhopper.com/api/1/matrix';
+    const BASE_URL = 'https://graphhopper.com/api/1/matrix';
+
+    /**
+     * {@inheritDoc}
+     */
+    public function __construct(ClientInterface $client, $additionalParams = array())
+    {
+        if(!isset($additionalParams['key'])) {
+            throw new ProviderError('set "key" parameter');
+        }
+
+        parent::__construct($client, $additionalParams);
+    }
 
     /**
      * {@inheritDoc}
@@ -30,7 +43,33 @@ class GraphhopperProvider extends HttpProvider implements ProviderInterface
             return $this->createDistance(0);
         }
 
+        $params = $this->getParams();
+        $params['from_point'] = $from->getLat().','.$from->getLng();
+        $params['to_point']   = $to->getLat().','.$to->getLng();
+        $params['out_array']  = 'distances';
 
-        return $this->createDistance(0);
+        $responce = $this
+            ->getClient()
+            ->get(self::BASE_URL, array(
+                'query' => $params,
+            ))
+            ->getBody();
+
+        $json = json_decode( $responce, true );
+
+        if(!isset($json)
+        || !isset($json['distances'])) {
+            throw new ProviderError('Wrong json responce');
+        }
+
+
+        try {
+            $distance = \igorw\get_in($json, ['distances', 0, 0]);
+        } catch(\InvalidArgumentException $exp){
+            throw new ProviderError('Provider responce format changed');
+        }
+
+        return $this->createDistance($distance);
     }
+
 }

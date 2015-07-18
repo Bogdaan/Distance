@@ -12,7 +12,7 @@ class ProviderTestBase extends \PHPUnit_Framework_TestCase
 {
     protected function getProvider()
     {
-        throw new Exception('Method not implemented!');
+        throw new Exception('not implemented');
     }
 
     protected function assertDistance(Distance $actual, Distance $expected)

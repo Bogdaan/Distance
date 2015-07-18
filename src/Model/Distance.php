@@ -6,14 +6,8 @@ namespace Distance\Model;
  * Distance entity
  * @author hcbogdan
  */
-class Distance
+class Distance implements DistanceInterface
 {
-    /**
-     * availible units
-     */
-    const UNIT_METER = 1;
-    const UNIT_KILOMETER = 2;
-    const UNIT_MILE = 3;
 
     /**
      * @var double $distance representation in meters
@@ -71,5 +65,16 @@ class Distance
     public function getProviderUid()
     {
         return $this->provider;
+    }
+
+    /**
+     * Convert to array
+     */
+    public function toArray()
+    {
+        return [
+            'lat' => $this->getLat(),
+            'lng' => $this->getLng(),
+        ];
     }
 }
