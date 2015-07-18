@@ -13,10 +13,10 @@ Instalation
 Usage
 -----
 
+*** examples
+
 
 Providers
 ---------
 
-
-Provider limits
----------------
+about providers and limits

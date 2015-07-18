@@ -30,7 +30,7 @@ class RoutexlProvider extends HttpProvider implements ProviderInterface
     /**
      * {@inheritDoc}
      */
-    public function __construct(ClientInterface $adapter, $additionalParams = array())
+    public function __construct(ClientInterface $client, $additionalParams = array())
     {
         if(!isset($additionalParams['username'])
         || !isset($additionalParams['password'])) {
@@ -43,7 +43,7 @@ class RoutexlProvider extends HttpProvider implements ProviderInterface
         unset($additionalParams['username']);
         unset($additionalParams['password']);
 
-        parent::__construct($adapter, $additionalParams);
+        parent::__construct($client, $additionalParams);
     }
 
     /**
@@ -73,7 +73,7 @@ class RoutexlProvider extends HttpProvider implements ProviderInterface
         );
 
         $responce = $this
-            ->getAdapter()
+            ->getClient()
             ->post(self::BASE_URL, array(
                 'query' => $params,
                 'auth'  => array(
@@ -95,7 +95,7 @@ class RoutexlProvider extends HttpProvider implements ProviderInterface
 
 
         try {
-            $distance = igorw\get_in($json, ['distances', 0, 'distance']);
+            $distance = \igorw\get_in($json, ['distances', 0, 'distance']);
         } catch(\InvalidArgumentException $exp){
             throw new ProviderError('Provider responce format changed');
         }

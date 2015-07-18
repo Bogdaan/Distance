@@ -12,10 +12,10 @@ use GuzzleHttp\ClientInterface;
 abstract class HttpProvider extends Provider
 {
     /**
-     * Query adapter.
+     * Query client.
      * @var ClientInterface
      */
-    private $adapter;
+    private $client;
 
     /**
      * Additional query params.
@@ -26,22 +26,22 @@ abstract class HttpProvider extends Provider
     /**
      * Create provider instance
      *
-     * @param ClientInterface $adapter
+     * @param ClientInterface $client
      * @param array           $additionalParams additinal query parameters
      * @see GoogleProvider::$params
      */
-    public function __construct(ClientInterface $adapter, $additionalParams = array())
+    public function __construct(ClientInterface $client, $additionalParams = array())
     {
-        $this->adapter = $adapter;
+        $this->client = $client;
         $this->params = $additionalParams;
     }
 
     /**
-     * @return ClientInterface query adapter
+     * @return ClientInterface query client
      */
-    public function getAdapter()
+    public function getClient()
     {
-        return $this->adapter;
+        return $this->client;
     }
 
     /**

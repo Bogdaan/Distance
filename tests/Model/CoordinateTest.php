@@ -1,6 +1,6 @@
 <?php
 
-namespace Distance\Test;
+namespace Distance\Tests;
 
 use Distance\Model\Coordinate;
 

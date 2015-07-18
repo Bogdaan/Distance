@@ -5,6 +5,7 @@ namespace Distance\Provider;
 use Distance\Model\Coordinate;
 use Distance\Model\Distance;
 use Distance\Exception\ProviderError;
+use Distance\Exception\QuotaExceeded;
 
 /**
  * Google distance matrix provider.
@@ -32,15 +33,18 @@ class GoogleProvider extends HttpProvider implements ProviderInterface
      */
     public function getDistance(Coordinate $from, Coordinate $to)
     {
-        $params = $this->getParams();
+        if($from==$to){
+            return $this->createDistance(0);    
+        }
 
         // convert to string
-        $params['origins'] = $from.'';
+        $params = $this->getParams();
+        $params['origins']      = $from.'';
         $params['destinations'] = $to.'';
-        $params['units'] = 'metric';
+        $params['units']        = 'metric';
 
         $responce = $this
-            ->getAdapter()
+            ->getClient()
             ->get(self::BASE_URL, array(
                 'query' => $params,
             ))
@@ -52,12 +56,14 @@ class GoogleProvider extends HttpProvider implements ProviderInterface
             throw new ProviderError('Wrong json responce');
         }
 
-        if($json['status'] != 'OK') {
+        if($json['status'] == 'OVER_QUERY_LIMIT') {
+            throw new QuotaExceeded();
+        } elseif($json['status'] != 'OK') {
             throw new ProviderError('Provider return status: '.$json->status);
         }
 
         try {
-            $distance = igorw\get_in($data, ['rows', 0, 'elements', 0, 'distance', 'value']);
+            $distance = \igorw\get_in($json, ['rows', 0, 'elements', 0, 'distance', 'value']);
 
         } catch(\InvalidArgumentException $exp){
             throw new ProviderError('Provider responce format changed');

@@ -101,12 +101,12 @@ class ProviderPool implements ProviderInterface
         {
             unset( $this->providers[$uid] );
 
-            if(empty($this->providers))
-                throw new PoolError('All providers disabled');
-
             if($this->activeProvider->getUid() == $uid)
                 $this->activeProvider = reset($this->providers);
         }
+
+        if(empty($this->providers))
+            throw new PoolError('All providers disabled');
 
         return $this;
     }
