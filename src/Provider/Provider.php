@@ -22,7 +22,7 @@ abstract class Provider
     public function getDistanceMatrix($coordinates)
     {
         $normalized = $this->normalizeMatrix( $coordinates );
-        return $this->queryDistanceMatrix($normalized);
+        return $this->queryDistanceMatrix( $normalized );
     }
 
     /**

@@ -43,15 +43,21 @@ $pool = new Distance\ProviderPool([
 ]);
 
 // GPS coordinates
-$point1 = new Coordinate(48.41, 34.81);
-$point2 = new Coordinate(48.43, 35.22);
+$coords = [
+    new Coordinate(48.41, 34.81),
+    new Coordinate(48.43, 35.22),
+    new Coordinate(48.43, 36.22).
+];
 
-
-$distanceObject = $pool->getDistance($point1, $point2);
-
+// case1: single distance
+$distanceObject = $pool->getDistance($coords[0], $coords[1]);
 $distanceInMeters = $distanceObject->getDistance(Distance::UNIT_METER);
 $distanceInMiles = $distanceObject->getDistance(Distance::UNIT_MILE);
 
+
+// case2: distance matrix 3x3
+$matrix = $pool->getDistanceMatrix($coords);
+$distanceInMeters = $matrix->getDistance($coords[0], $coords[1], Distance::UNIT_METER);
 ```
 
 

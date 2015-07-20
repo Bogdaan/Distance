@@ -16,12 +16,21 @@ class DistanceMatrix implements DistanceInterface
      */
     public function __construct($coordinates, $distances)
     {
-        if(count($coordinates) != count($distances)) {
-            throw new Exception('count of distances = (count of coordinates ^ 2)');
+        // reset to list
+        $coordinates = array_values($coordinates);
+
+        $coordsCount = count($coordinates);
+
+        if($coordsCount != count($distances)) {
+            throw new \Exception('count of distances = (count of coordinates ^ 2)');
         }
 
         foreach($coordinates as $iidx => $i)
         {
+            if($coordsCount != count($distances[ $iidx ])) {
+                throw new \Exception('count of distances = (count of coordinates ^ 2)');
+            }
+
             foreach($coordinates as $jidx => $j)
             {
                 $akey = $i.$j;

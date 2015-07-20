@@ -92,7 +92,7 @@ class GoogleProvider extends HttpProvider implements ProviderInterface
         }
 
         $distances = [];
-        foreach($json['rows'] as $rowIdx => $row)
+        foreach($json['rows']as $rowIdx => $row)
         {
             foreach($row['elements'] as $eIdx => $element)
             {

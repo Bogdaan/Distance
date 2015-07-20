@@ -13,4 +13,5 @@ interface DistanceInterface
     const UNIT_METER     = 1;
     const UNIT_KILOMETER = 2;
     const UNIT_MILE      = 3;
+
 }

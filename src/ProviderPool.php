@@ -72,8 +72,7 @@ class ProviderPool implements ProviderInterface
 
     /**
      * Fali-safe distance between two coordinates in meters
-     *
-     * @return integer distance in menters
+     * @return Distance distance object
      */
     public function getDistance(Coordinate $from, Coordinate $to)
     {
@@ -86,6 +85,26 @@ class ProviderPool implements ProviderInterface
         } catch (ProviderError $exception) {
             $this->disableActiveProvider();
             return $this->getDistance($from, $to);
+
+        }
+    }
+
+    /**
+     * Fail-safe distance matrix calculator.
+     * @param array list of coordinates
+     * @return DistanceMatrix
+     */
+    public function getDistanceMatrix($coordinates)
+    {
+        try {
+            return $this->getActiveProvider()->getDistanceMatrix($coordinates);
+
+        } catch (PoolError $exception) {
+            throw $exception;
+
+        } catch (ProviderError $exception) {
+            $this->disableActiveProvider();
+            return $this->getDistanceMatrix($coordinates);
 
         }
     }

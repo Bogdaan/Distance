@@ -30,8 +30,7 @@ interface ProviderInterface
      * Calculate distance matrix.
      *
      * @param array list of coordinates
-     *
-     * @return array distance matrix
+     * @return DistanceMatrix
      */
     public function getDistanceMatrix($coordinates);
 }

@@ -39,6 +39,18 @@ class GoogleProviderTest extends HttpProviderTestBase
 
     public function testDistanceMatrix()
     {
+        $coords = [
+            new Coordinate(10, 10),
+            new Coordinate(20, 20)
+        ];
+
+        $client = $this->getSuccessMatrixClient();
+        $provider = new GoogleProvider($client);
+
+        $matrix = $provider->getDistanceMatrix($coords);
+
+        $this->assertEquals(0, $matrix->getDistance($coords[0], $coords[0], Distance::UNIT_METER));
+        $this->assertEquals(0, $matrix->getDistance($coords[1], $coords[1], Distance::UNIT_METER));
     }
 
     /**
@@ -55,6 +67,7 @@ class GoogleProviderTest extends HttpProviderTestBase
         $dist = $provider->getDistance($coord1, $coord2);
     }
 
+
     protected function getQuotaClient()
     {
         return $this->getClientWithBody('{
@@ -64,6 +77,7 @@ class GoogleProviderTest extends HttpProviderTestBase
            "status" : "OVER_QUERY_LIMIT"
         }');
     }
+
 
     protected function getSuccessClient()
     {
@@ -90,4 +104,73 @@ class GoogleProviderTest extends HttpProviderTestBase
            "status" : "OK"
         }');
     }
+
+    /**
+     * 2x2 matrix
+     */
+    protected function getSuccessMatrixClient()
+    {
+        return $this->getClientWithBody('{
+   "destination_addresses" : [ "Vancouver, BC, Canada", "Seattle, Washington, États-Unis" ],
+   "origin_addresses" : [ "Vancouver, BC, Canada", "Seattle, Washington, États-Unis" ],
+   "rows" : [
+      {
+         "elements" : [
+            {
+               "distance" : {
+                  "text" : "1 m",
+                  "value" : 0
+               },
+               "duration" : {
+                  "text" : "1 minute",
+                  "value" : 0
+               },
+               "status" : "OK"
+            },
+            {
+               "distance" : {
+                  "text" : "270 km",
+                  "value" : 270100
+               },
+               "duration" : {
+                  "text" : "15 heures 25 minutes",
+                  "value" : 55514
+               },
+               "status" : "OK"
+            }
+         ]
+      },
+      {
+         "elements" : [
+            {
+               "distance" : {
+                  "text" : "268 km",
+                  "value" : 267501
+               },
+               "duration" : {
+                  "text" : "15 heures 3 minutes",
+                  "value" : 54198
+               },
+               "status" : "OK"
+            },
+            {
+               "distance" : {
+                  "text" : "1 m",
+                  "value" : 0
+               },
+               "duration" : {
+                  "text" : "1 minute",
+                  "value" : 0
+               },
+               "status" : "OK"
+            }
+         ]
+      }
+   ],
+   "status" : "OK"
+}');
+
+    }
+
+
 }

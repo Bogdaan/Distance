@@ -5,6 +5,7 @@ namespace Distance\Provider;
 use GuzzleHttp\ClientInterface;
 use Distance\Model\Coordinate;
 use Distance\Model\Distance;
+use Distance\Model\DistanceMatrix;
 use Distance\Exception\ProviderError;
 
 /**
@@ -70,6 +71,17 @@ class GraphhopperProvider extends HttpProvider implements ProviderInterface
      */
     protected function queryDistanceMatrix($normalized)
     {
+        $params = $this->getParams();
+        $params['out_array']  = 'distances';
+
+        $params['from_point'] = [];
+        $params['to_point'] = [];
+        foreach($normalized as $i)
+        {
+            $params['from_point'][] = $i->getLat().','.$i->getLng();
+            $params['to_point'][]   = $i->getLat().','.$i->getLng();
+        }
+
         $json = $this->getQueryJson( $params );
 
         if(!isset($json)
