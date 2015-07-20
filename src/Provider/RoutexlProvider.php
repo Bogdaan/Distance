@@ -72,7 +72,7 @@ class RoutexlProvider extends HttpProvider implements ProviderInterface
             ),
         );
 
-        $json = json_decode( $this->getQueryBody($params), true );
+        $json = $this->getQueryJson($params);
 
         if(!isset($json)) {
             throw new ProviderError('Wrong json responce');
@@ -105,7 +105,7 @@ class RoutexlProvider extends HttpProvider implements ProviderInterface
 
         $countNormalized = count($normalized);
 
-        $json = json_decode( $this->getQueryBody($params), true );
+        $json = $this->getQueryJson($params);
 
         if(!isset($json)
         || $json['count'] != $countNormalized) {
@@ -126,9 +126,9 @@ class RoutexlProvider extends HttpProvider implements ProviderInterface
      * @param  array $params query params
      * @return string        responce body
      */
-    protected function getQueryBody($params)
+    protected function getQueryJson($params)
     {
-        return $this
+        $responce = $this
             ->getClient()
             ->post(self::BASE_URL, array(
                 'query' => $params,
@@ -138,5 +138,7 @@ class RoutexlProvider extends HttpProvider implements ProviderInterface
                 ),
             ))
             ->getBody();
+
+        return json_decode( $responce, true );
     }
 }

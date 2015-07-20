@@ -48,14 +48,7 @@ class GraphhopperProvider extends HttpProvider implements ProviderInterface
         $params['to_point']   = $to->getLat().','.$to->getLng();
         $params['out_array']  = 'distances';
 
-        $responce = $this
-            ->getClient()
-            ->get(self::BASE_URL, array(
-                'query' => $params,
-            ))
-            ->getBody();
-
-        $json = json_decode( $responce, true );
+        $json = $this->getQueryJson( $params );
 
         if(!isset($json)
         || !isset($json['distances'])) {
@@ -72,4 +65,35 @@ class GraphhopperProvider extends HttpProvider implements ProviderInterface
         return $this->createDistance($distance);
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    protected function queryDistanceMatrix($normalized)
+    {
+        $json = $this->getQueryJson( $params );
+
+        if(!isset($json)
+        || !isset($json['distances'])) {
+            throw new ProviderError('Wrong json responce');
+        }
+
+        return new DistanceMatrix($normalized, $json['distances']);
+    }
+
+    /**
+     * Create service query
+     * @param  array $params query params
+     * @return string        responce body
+     */
+    protected function getQueryJson($params)
+    {
+        $responce = $this
+            ->getClient()
+            ->get(self::BASE_URL, array(
+                'query' => $params,
+            ))
+            ->getBody();
+
+        return json_decode( $responce, true );
+    }
 }
