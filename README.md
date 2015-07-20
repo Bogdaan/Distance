@@ -1,8 +1,14 @@
 PHP distance library
 ====================
 
-This library provide distance calculation for geo applications.
-Library does not provide geocoding features (for these purposes, you can use [this library](https://github.com/geocoder-php/Geocoder) ).
+[![Build
+Status](https://secure.travis-ci.org/Bogdaan/Distance.png)](http://travis-ci.org/Bogdaan/Distance)
+
+This library provide:
+ - distance calculation
+ - distance matrix calculation
+
+Note that the library does not provide geocoding features (for these purposes, you can use [this library](https://github.com/geocoder-php/Geocoder)).
 
 Example
 -------
@@ -64,8 +70,10 @@ $distanceInMeters = $matrix->getDistance($coords[0], $coords[1], Distance::UNIT_
 Instalation
 -----------
 
-- composer lib
-- documentation
+Using [composer](http://getcomposer.org):
+```
+$ composer require willdurand/geocoder
+```
 
 
 Providers

@@ -1,8 +1,8 @@
 {
-    "name": "Bogdaan/distance",
+    "name": "bogdaan/distance",
     "type": "library",
     "description": "Geo distance library for PHP.",
-    "keywords": ["distance", "geo"],
+    "keywords": ["distance", "geo", "matrix"],
     "license": "MIT",
     "authors": [
         {

@@ -72,8 +72,8 @@ class GraphhopperProvider extends HttpProvider implements ProviderInterface
     protected function queryDistanceMatrix($normalized)
     {
         $params = $this->getParams();
+        
         $params['out_array']  = 'distances';
-
         $params['from_point'] = [];
         $params['to_point'] = [];
         foreach($normalized as $i)
