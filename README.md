@@ -72,7 +72,7 @@ Instalation
 
 Using [composer](http://getcomposer.org):
 ```
-$ composer require willdurand/geocoder
+$ composer require bogdaan/distance
 ```
 
 
